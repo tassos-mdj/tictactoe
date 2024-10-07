@@ -55,15 +55,22 @@ function createPlayer() {
 
 
 function playRound() {
-    
+        let playersturn = document.querySelector(".playersturn");
+        const board = document.querySelector(".board");
         let playermove;
         if (gameboard.playerAlog.length > gameboard.playerBlog.length) {
-            playermove = prompt(`It's ${game.playerB.name}'s turn. Enter your move: `, "");
+            // playermove = prompt(`It's ${game.playerB.name}'s turn. Enter your move: `, "");
+            playersturn.textContent = "It's playerB's turn. Enter your move: ";
+            board.addEventListener("click", function (e) {
+                                                playermove = e.target.id
+                                                console.log(playermove) });
             if (checkExisting(playermove) === true) {
-                window.alert("That's taken!");
+                // window.alert("That's taken!");
+                playersturn.textContent = "It's taken!";
                 playRound();
             } else {
                 game.playerBmove(playermove);
+                
                 if (game.checkTriad(gameboard.playerBlog) === true) {
                     window.alert(`${game.playerB.name} wins!`);
                 } else {
@@ -71,12 +78,19 @@ function playRound() {
                 }
             }
         } else {
-            playermove = prompt(`It's ${game.playerA.name}'s turn. Enter your move: `, "");
+            // playermove = prompt(`It's ${game.playerA.name}'s turn. Enter your move: `, "");
+            let playermove;
+            playersturn.textContent = "It's playerA's turn. Enter your move: ";
+            board.addEventListener("click", function (e) {
+                                                playermove = e.target.id
+                                                console.log(playermove) });
             if (checkExisting(playermove) === true) {
-                window.alert("That's taken!");
+                //window.alert("That's taken!");
+                playersturn.textContent = "It's taken!";
                 playRound();
             } else {
                 game.playerAmove(playermove);
+                
                 if (game.checkTriad(gameboard.playerAlog) === true) {
                     window.alert(`${game.playerA.name} wins!`);
                 } else {
