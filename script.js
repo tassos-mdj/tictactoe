@@ -22,10 +22,13 @@ function createGame() {
     }
 
     function checkTriad(playLog) {
+        
         if (playLog.length < 3) {
+            
             return false;
         } else {
             for (let x = 1; x < 4 ; x++) {
+                
                 if (
                     playLog.reduce(
                     (acc,curr) =>  curr.includes('1,1') || curr.includes('2,2') || curr.includes('3,3') ? ++acc : acc
@@ -44,8 +47,9 @@ function createGame() {
                     ,0) === 3
                     ) {
                         return true;
-                    } else return false;
+                    } 
             }
+            
         }
     }
 
@@ -98,6 +102,8 @@ function playRound(playermove) {
                 }
             }
         }
+        console.log(gameboard.playerAlog);
+        console.log(gameboard.playerBlog);
 }
 
 function checkExisting(move) {
