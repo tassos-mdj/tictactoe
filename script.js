@@ -1,6 +1,8 @@
 const board = document.querySelector(".board");
 let playersturn = document.querySelector(".playersturn");
 let game;
+const newGameButton = document.getElementById("newgame");
+
 
 let gameboard = function() {
     const playerAlog = [];
