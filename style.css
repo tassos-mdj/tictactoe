@@ -1,17 +1,74 @@
+@font-face {
+    font-family: 'Neon Glow';
+    src: url(https://assets.codepen.io/230569/NeonGlow-8VLz.ttf);
+  }
+
 body {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 0.5rem;
     justify-content: center;
+    align-items: center;
+    background-color: black;
 }
 
 .board {
     display: grid;
-    grid-template-columns: repeat(3, 50px);
-    grid-template-rows: repeat(3, 50px);
-    
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 0.5rem;
+    margin: 2rem;
 }
 
-.cell {
-    border: 1px solid black;
-}
+.cell , button {
+    --blur: 1.75rem;
+    --box-blur: calc(0.5 * var(--blur));
+    --glow: var(--color);
+    border-radius: 12px;
+    border: 4px solid currentColor;
+    box-shadow: 
+      /* --- "glass" tube --- */
+      /* inside */ inset 0 0 0 2px rgba(0, 0, 0, 0.15),
+      /* outside */      0 0 0 2px rgba(0, 0, 0, 0.15),
+      /* --- glow --- */
+      /* inside */ inset 0 0 var(--box-blur) var(--glow),
+      /* outside */      0 0 var(--box-blur) var(--glow);
+    color: var(--color, white);
+    display: flex;
+    font-size: 4rem; 
+    font-family: 'Neon Glow';
+    text-shadow: 0 0 var(--blur) var(--glow);
+    justify-content: center;
+    align-items: center;
+    
+    > * {
+      margin: 0;
+      padding: 0;
+    }
+   
+    --color: #FDA802; filter: brightness(110%);
+    &.x { --color: #E555C7; filter: brightness(125%); }
+    &.o { --color: #B7E7F7; filter: saturate(200%); }
+  }
+
+  .playersturn {
+    font-size: 2rem; 
+    font-family: 'Neon Glow';
+    text-shadow: 0 0 var(--blur) var(--glow);
+    color: #FDA802; filter: brightness(110%);
+    margin: 0;
+  }
+
+  h1 {
+    color: #B7E7F7; filter: saturate(200%);
+    font-size: 3rem; 
+    font-family: 'Neon Glow';
+    text-shadow: 0 0 var(--blur) var(--glow);
+  }
+
+  button {
+    background-color: black;
+    cursor: pointer;
+    margin: 1.5rem;
+    font-size: 2.5rem;
+  }

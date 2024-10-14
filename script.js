@@ -5,8 +5,8 @@ const newGameButton = document.getElementById("newgame");
 
 
 let gameboard = function() {
-    const playerAlog = [];
-    const playerBlog = [];
+    let playerAlog = [];
+    let playerBlog = [];
     function resetGameboard() {
         playerAlog = [];
         playerBlog = [];
@@ -73,7 +73,8 @@ function createGame() {
 function playRound(playermove) {
     if (gameboard.playerAlog.length === 0) {
         game.playerAmove(playermove);
-        document.getElementById(playermove).textContent = "A";
+        document.getElementById(playermove).textContent = "X";
+        document.getElementById(playermove).classList.add("x");
         guideDisplay("It's playerB's turn. Enter your move: ");
     } else { 
             if (gameboard.playerAlog.length > gameboard.playerBlog.length) {
@@ -81,7 +82,8 @@ function playRound(playermove) {
                     guideDisplay("That's taken!");
                 } else {
                     game.playerBmove(playermove);
-                    document.getElementById(playermove).textContent = "B";            
+                    document.getElementById(playermove).textContent = "O";
+                    document.getElementById(playermove).classList.add("o");            
                     if (game.checkTriad(gameboard.playerBlog) === true) {
                         gameFinish("PlayerB wins!");
                         
@@ -95,7 +97,8 @@ function playRound(playermove) {
                     guideDisplay("That's taken!");
                 } else {
                     game.playerAmove(playermove);
-                    document.getElementById(playermove).textContent = "A";
+                    document.getElementById(playermove).textContent = "X";
+                    document.getElementById(playermove).classList.add("x");
                     if (game.checkTriad(gameboard.playerAlog) === true) {
                         gameFinish("PlayerA wins!");
                     } else {
@@ -119,11 +122,11 @@ function checkDraw() {
 }
 
 function guideDisplay(message) {
-    if (game != null)
+    if (game != "finished")
     playersturn.textContent = message;
 }
 
-function gameStarter() {
+function gameInitiator() {
     game = createGame();
     board.addEventListener("click", function (e) {
         playRound(e.target.id);
@@ -136,9 +139,47 @@ function gameFinish(winner) {
     p = document.createElement("p");
     p.textContent = "Start over?";
     playersturn.appendChild(p);
-    game = null;
+    game = "finished";
+    newGameButton.style.display = "block";
+    
 }
 
-gameStarter();
+function gameStart() {
+    newGameButton.addEventListener("click", function () {
+        gameInitiator();
+        newGameButton.style.display = "none";
+        boardRemover();
+        boardMaker();
+        
+    })
+}
+
+
+function boardMaker() {
+    let cellDiv;
+    for (let x = 1; x < 4; x++) {
+        for (let y = 1 ; y < 4; y++) {
+            cellDiv = document.createElement("div");
+            cellDiv.classList.add("cell");
+            numId = `${x},${y}`;
+            cellDiv.setAttribute("id", numId );
+            board.appendChild(cellDiv);
+        }
+    }
+}
+
+function boardRemover() {
+    while (board.firstChild) {
+        board.removeChild(board.lastChild);
+    }
+    gameboard.playerAlog = [];
+    gameboard.playerBlog = [];
+    console.log(gameboard.playerAlog.length);
+}
+
+guideDisplay("Welcome to the classic game! Have fun!");
+gameStart();
+
+
 
 
