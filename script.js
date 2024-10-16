@@ -2,7 +2,12 @@ const board = document.querySelector(".board");
 let playersturn = document.querySelector(".playersturn");
 let game;
 const newGameButton = document.getElementById("newgame");
-
+board.addEventListener("click", function triggerPlay(e) {
+    playRound(e.target.id);
+   });
+let playerA = document.getElementById("player1");
+let playerB = document.getElementById("player2");
+const playersInput = document.querySelector(".playersinput");
 
 let gameboard = function() {
     let playerAlog = [];
@@ -13,6 +18,7 @@ let gameboard = function() {
     }
     return {playerAlog, playerBlog, resetGameboard};
 }();
+
 
 function createGame() {
     function playerAmove(tile) {
@@ -55,13 +61,7 @@ function createGame() {
         }
     }
 
-    
-    const playerA =  "PLayerA"  //createPlayer();
-    
-    const playerB = "PlayerB" //createPlayer();
-    
-
-    return {playerA,playerB,playerAmove,playerBmove,checkTriad};
+    return {playerAmove,playerBmove,checkTriad};
 }
 
 // function createPlayer() {
@@ -75,7 +75,7 @@ function playRound(playermove) {
         game.playerAmove(playermove);
         document.getElementById(playermove).textContent = "X";
         document.getElementById(playermove).classList.add("x");
-        guideDisplay("It's playerB's turn. Enter your move: ");
+        guideDisplay(`It's ${playerB.value}'s turn. Enter your move: `);
     } else { 
             if (gameboard.playerAlog.length > gameboard.playerBlog.length) {
                 if (checkExisting(playermove) === true) {
@@ -85,10 +85,10 @@ function playRound(playermove) {
                     document.getElementById(playermove).textContent = "O";
                     document.getElementById(playermove).classList.add("o");            
                     if (game.checkTriad(gameboard.playerBlog) === true) {
-                        gameFinish("PlayerB wins!");
+                        gameFinish(`${playerB.value} wins!`);
                         
                     } else {
-                        checkDraw() === false ? guideDisplay("It's playerA's turn. Enter your move: ") : gameFinish("It's a draw!");
+                        checkDraw() === false ? guideDisplay(`It's ${playerA.value}'s turn. Enter your move: `) : gameFinish("It's a draw!");
                         
                     }
                 }
@@ -100,9 +100,9 @@ function playRound(playermove) {
                     document.getElementById(playermove).textContent = "X";
                     document.getElementById(playermove).classList.add("x");
                     if (game.checkTriad(gameboard.playerAlog) === true) {
-                        gameFinish("PlayerA wins!");
+                        gameFinish(`${playerA.value} wins!`);
                     } else {
-                        checkDraw() === false ? guideDisplay("It's playerB's turn. Enter your move: ") : gameFinish("It's a draw!");
+                        checkDraw() === false ? guideDisplay(`It's ${playerB.value}'s turn. Enter your move: `) : gameFinish("It's a draw!");
                     }
                 }
             }
@@ -128,10 +128,8 @@ function guideDisplay(message) {
 
 function gameInitiator() {
     game = createGame();
-    board.addEventListener("click", function (e) {
-        playRound(e.target.id);
-        });
-    guideDisplay("Lets Play! Player A you begin!");
+    
+    guideDisplay(`Lets Play! ${playerA.value} you begin!`);
 }
 
 function gameFinish(winner) {
@@ -147,13 +145,13 @@ function gameFinish(winner) {
 function gameStart() {
     newGameButton.addEventListener("click", function () {
         gameInitiator();
+        playersInput.style.display = "none";
         newGameButton.style.display = "none";
         boardRemover();
         boardMaker();
         
-    })
+    });
 }
-
 
 function boardMaker() {
     let cellDiv;
@@ -175,6 +173,7 @@ function boardRemover() {
     gameboard.playerAlog = [];
     gameboard.playerBlog = [];
     console.log(gameboard.playerAlog.length);
+   
 }
 
 guideDisplay("Welcome to the classic game! Have fun!");

@@ -51,7 +51,7 @@ body {
     &.o { --color: #B7E7F7; filter: saturate(200%); }
   }
 
-  .playersturn {
+  .playersturn, label {
     font-size: 2rem; 
     font-family: 'Neon Glow';
     text-shadow: 0 0 var(--blur) var(--glow);
@@ -72,3 +72,32 @@ body {
     margin: 1.5rem;
     font-size: 2.5rem;
   }
+
+  .playersinput {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 2rem;
+  }
+
+  input[type="text"] {
+    border-radius: 20px;
+    background-color: black;
+    font-size: 1.5rem; 
+    font-family: 'Neon Glow';
+    text-shadow: 0 0 var(--blur) var(--glow);
+    color: #FDA802; filter: brightness(110%);
+    border-color: #FDA802; filter: brightness(110%);
+    text-align: center;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active{
+      -webkit-box-shadow: 0 0 0 50px black inset !important;
+  }
+
+  input:-webkit-autofill{
+    -webkit-text-fill-color: #FDA802; filter: brightness(110%) !important;
+}
