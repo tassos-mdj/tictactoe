@@ -12,63 +12,24 @@ const playersInput = document.querySelector(".playersinput");
 let gameboard = function() {
     let playerAlog = [];
     let playerBlog = [];
-    function resetGameboard() {
-        playerAlog = [];
-        playerBlog = [];
-    }
-    return {playerAlog, playerBlog, resetGameboard};
+    
+    return {playerAlog, playerBlog};
 }();
 
+function resetGameboard() {
+    gameboard.playerAlog = [];
+    gameboard.playerBlog = [];
+}
 
 function createGame() {
     function playerAmove(tile) {
         gameboard.playerAlog.push(tile);
     }
-    
     function playerBmove(tile) {
         gameboard.playerBlog.push(tile);
     }
-
-    function checkTriad(playLog) {
-        
-        if (playLog.length < 3) {
-            
-            return false;
-        } else {
-            for (let x = 1; x < 4 ; x++) {
-                
-                if (
-                    playLog.reduce(
-                    (acc,curr) =>  curr.includes('1,1') || curr.includes('2,2') || curr.includes('3,3') ? ++acc : acc
-                    ,0) === 3
-                    || 
-                    playLog.reduce(
-                    (acc,curr) =>  curr.includes('3,1') || curr.includes('2,2') || curr.includes('1,3') ? ++acc : acc
-                    ,0) === 3
-                    ||
-                    playLog.reduce(
-                    (acc,curr) =>  curr.includes(x + ',') ? ++acc : acc
-                    ,0) === 3 
-                    ||
-                    playLog.reduce(
-                    (acc,curr) =>  curr.includes(',' + x) ? ++acc : acc
-                    ,0) === 3
-                    ) {
-                        return true;
-                    } 
-            }
-            
-        }
-    }
-
-    return {playerAmove,playerBmove,checkTriad};
+    return {playerAmove,playerBmove};
 }
-
-// function createPlayer() {
-//     const name = prompt("Please enter your name: ", "");
-//     return {name};
-//}
-
 
 function playRound(playermove) {
     if (gameboard.playerAlog.length === 0) {
@@ -84,7 +45,7 @@ function playRound(playermove) {
                     game.playerBmove(playermove);
                     document.getElementById(playermove).textContent = "O";
                     document.getElementById(playermove).classList.add("o");            
-                    if (game.checkTriad(gameboard.playerBlog) === true) {
+                    if (checkTriad(gameboard.playerBlog) === true) {
                         gameFinish(`${playerB.value} wins!`);
                         
                     } else {
@@ -99,7 +60,7 @@ function playRound(playermove) {
                     game.playerAmove(playermove);
                     document.getElementById(playermove).textContent = "X";
                     document.getElementById(playermove).classList.add("x");
-                    if (game.checkTriad(gameboard.playerAlog) === true) {
+                    if (checkTriad(gameboard.playerAlog) === true) {
                         gameFinish(`${playerA.value} wins!`);
                     } else {
                         checkDraw() === false ? guideDisplay(`It's ${playerB.value}'s turn. Enter your move: `) : gameFinish("It's a draw!");
@@ -107,14 +68,38 @@ function playRound(playermove) {
                 }
             }
         }
-        console.log(gameboard.playerAlog);
-        console.log(gameboard.playerBlog);
+}
+
+function checkTriad(playLog) {
+    if (playLog.length < 3) {
+        return false;
+    } else {
+        for (let x = 1; x < 4 ; x++) {
+            if (
+                playLog.reduce(
+                (acc,curr) =>  curr.includes('1,1') || curr.includes('2,2') || curr.includes('3,3') ? ++acc : acc
+                ,0) === 3
+                || 
+                playLog.reduce(
+                (acc,curr) =>  curr.includes('3,1') || curr.includes('2,2') || curr.includes('1,3') ? ++acc : acc
+                ,0) === 3
+                ||
+                playLog.reduce(
+                (acc,curr) =>  curr.includes(x + ',') ? ++acc : acc
+                ,0) === 3 
+                ||
+                playLog.reduce(
+                (acc,curr) =>  curr.includes(',' + x) ? ++acc : acc
+                ,0) === 3
+                ) {
+                    return true;
+                } 
+        }
+    }
 }
 
 function checkExisting(move) {
-    if (gameboard.playerAlog.includes(move) || gameboard.playerBlog.includes(move)) {
-        return true;
-    } else return false;
+    return gameboard.playerAlog.includes(move) || gameboard.playerBlog.includes(move);
 }
 
 function checkDraw() {
@@ -122,34 +107,18 @@ function checkDraw() {
 }
 
 function guideDisplay(message) {
-    if (game != "finished")
+    if (game !== "finished")
     playersturn.textContent = message;
-}
-
-function gameInitiator() {
-    game = createGame();
-    
-    guideDisplay(`Lets Play! ${playerA.value} you begin!`);
-}
-
-function gameFinish(winner) {
-    guideDisplay(winner);
-    p = document.createElement("p");
-    p.textContent = "Start over?";
-    playersturn.appendChild(p);
-    game = "finished";
-    newGameButton.style.display = "block";
-    
 }
 
 function gameStart() {
     newGameButton.addEventListener("click", function () {
-        gameInitiator();
+        game = createGame();
+        guideDisplay(`Lets Play! ${playerA.value} you begin!`);
         playersInput.style.display = "none";
         newGameButton.style.display = "none";
         boardRemover();
         boardMaker();
-        
     });
 }
 
@@ -166,19 +135,21 @@ function boardMaker() {
     }
 }
 
+function gameFinish(winner) {
+    guideDisplay(winner);
+    p = document.createElement("p");
+    p.textContent = "Start over?";
+    playersturn.appendChild(p);
+    game = "finished";
+    newGameButton.style.display = "block";
+}
+
 function boardRemover() {
     while (board.firstChild) {
         board.removeChild(board.lastChild);
     }
-    gameboard.playerAlog = [];
-    gameboard.playerBlog = [];
-    console.log(gameboard.playerAlog.length);
-   
+    resetGameboard();
 }
 
 guideDisplay("Welcome to the classic game! Have fun!");
 gameStart();
-
-
-
-
